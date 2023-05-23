@@ -220,7 +220,7 @@ export const Report: FC<ReportProps> = ({ tournaments }) => {
           )}
         </Listbox>
       </div>
-      <main className="flex flex-col min-w-0 pt-12">
+      <main className="flex flex-col min-w-0 pt-5">
         <div className="mx-auto min-w-0 max-w-[800px] flex-1">
           <ReportTextarea
             reportText={reportText}

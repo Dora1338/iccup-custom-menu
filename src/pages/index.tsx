@@ -4,11 +4,7 @@ import { Tournament } from "@/utils/types";
 import { NextPage } from "next";
 import { useState, useEffect } from "react";
 
-interface IndexProps {
-  tournaments: Tournament[];
-}
-
-const Index: NextPage<IndexProps> = () => {
+const Index: NextPage = () => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
 
   useEffect(() => {
