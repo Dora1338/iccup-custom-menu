@@ -10,17 +10,20 @@ export const fetchFinishedTours = async (): Promise<Tournament[]> => {
     const $ = cheerio.load(data);
     const tournaments: Tournament[] = [];
 
-    $(".stady-color-finished").each((_, el) => {
-      const tournamentTitle = $(el).siblings(".t-main-title").text().trim();
-      const tournamentUrl = $(el)
-        .siblings(".t-main-title")
-        .children("a")
-        .attr("href");
-      const id = tournamentUrl?.match(/\d+/)?.[0] ?? "";
-      tournaments.push({
-        title: tournamentTitle,
-        id,
-      });
+    $(".tourney-info").each((_, el) => {
+      const statusElement = $(el).find(".in-sgnt");
+      if (
+        statusElement.length === 0 ||
+        statusElement.text().trim().length === 0
+      ) {
+        const tournamentTitle = $(el).find(".t-main-title").text().trim();
+        const tournamentUrl = $(el).find(".t-main-title > a").attr("href");
+        const id = tournamentUrl?.match(/\d+/)?.[0] || "";
+        tournaments.push({
+          title: tournamentTitle,
+          id: id,
+        });
+      }
     });
 
     return tournaments;
