@@ -24,6 +24,8 @@ export const Report: FC<ReportProps> = ({ tournaments }) => {
   const [tlValue, setTlValue] = useState("0");
   const [thirdPlace, setThirdPlace] = useState<string[] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTourInProcessModalOpen, setIsTourInProcessModalOpen] =
+    useState(false);
   const [isValidTlInput, setIsValidTlInput] = useState(true);
 
   const generateReportText = ({
@@ -114,9 +116,20 @@ export const Report: FC<ReportProps> = ({ tournaments }) => {
   }
 
   const handleTourChange = (tour: TourResult) => {
-    setIsModalOpen(true);
-    setThirdPlace(null);
-    fetchTourResults(tour.id).then((data) => setResults(data));
+    fetchTourResults(tour.id)
+      .then((data) => {
+        setResults(data);
+        setThirdPlace(null);
+
+        if (data.top1.length > 0) {
+          setIsModalOpen(true);
+        } else if (data.top1.length === 0) {
+          setIsTourInProcessModalOpen(true);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   useEffect(() => {
@@ -148,8 +161,8 @@ export const Report: FC<ReportProps> = ({ tournaments }) => {
       </div>
       <div className="order-2 w-64 min-w-0 mt-5 hidden xl:block xl:pl-8">
         <ul className="text-sm font-medium text-gray-400 space-y-5">
-          {tournaments.map((tour: any) => (
-            <li key={tour.id}>
+          {tournaments.map((tour: any, index) => (
+            <li key={index}>
               <a
                 className="cursor-pointer text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 onClick={() => handleTourChange(tour)}
@@ -228,10 +241,12 @@ export const Report: FC<ReportProps> = ({ tournaments }) => {
           />
         </div>
       </main>
-      {results && (
+      {results?.top1 && (
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          modalTitle="Почти готово!"
+          buttonTitle="Подтвердить"
           isButtonDisabled={
             (!thirdPlace && !thirdPlaceEnabled) || !isValidTlInput
           }
@@ -307,6 +322,14 @@ export const Report: FC<ReportProps> = ({ tournaments }) => {
           )}
         </Modal>
       )}
+      <Modal
+        isOpen={isTourInProcessModalOpen}
+        onClose={() => setIsTourInProcessModalOpen(false)}
+        modalTitle="Ошибка!"
+        buttonTitle="Понятно"
+      >
+        <span>Турнир в процессе</span>
+      </Modal>
     </>
   );
 };
