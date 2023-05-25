@@ -6,6 +6,8 @@ interface ModalProps {
   onClose: () => void;
   children: ReactNode;
   isButtonDisabled?: boolean;
+  modalTitle: string;
+  buttonTitle: string;
 }
 
 export const Modal: FC<ModalProps> = ({
@@ -13,6 +15,8 @@ export const Modal: FC<ModalProps> = ({
   onClose,
   children,
   isButtonDisabled,
+  modalTitle,
+  buttonTitle,
 }) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -45,7 +49,7 @@ export const Modal: FC<ModalProps> = ({
                   as="h3"
                   className="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"
                 >
-                  Почти готово!
+                  {modalTitle}
                 </Dialog.Title>
                 {children}
                 <div className="mt-4">
@@ -55,7 +59,7 @@ export const Modal: FC<ModalProps> = ({
                     onClick={onClose}
                     disabled={isButtonDisabled}
                   >
-                    Подтвердить
+                    {buttonTitle}
                   </button>
                 </div>
               </Dialog.Panel>
