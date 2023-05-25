@@ -241,7 +241,7 @@ export const Report: FC<ReportProps> = ({ tournaments }) => {
           />
         </div>
       </main>
-      {results?.top1 && (
+      {results && (
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
