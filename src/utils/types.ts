@@ -10,6 +10,7 @@ export interface TourResult {
   title: string;
   registeredPlayersCount: string;
   confirmedPlayersCount: number;
+  numOfRounds: number;
   top1: string[];
   top2: string[];
   firstChoice: string[];

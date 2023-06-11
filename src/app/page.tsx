@@ -1,19 +1,18 @@
+"use client";
+
+import { Input } from "@/components/Input";
+import { Modal } from "@/components/Modal";
+import { ReportTextarea } from "@/components/ReportTextarea";
+import { Switch } from "@/components/Switch";
+import { calculateReward } from "@/utils/calculateReward";
+import { fetchFinishedTours } from "@/utils/fetchFinishedTours";
 import { fetchTourResults } from "@/utils/fetchTourResults";
 import { TourResult, Tournament } from "@/utils/types";
 import { Listbox, RadioGroup, Transition } from "@headlessui/react";
-import { FC, useEffect, useState, Fragment, ChangeEvent } from "react";
-import { ReportTextarea } from "../ReportTextarea";
-import { Modal } from "../Modal";
-import { Switch } from "../Switch";
-import { calculateReward } from "@/utils/calculateReward";
-import { Input } from "../Input";
+import { Fragment, useEffect, useState } from "react";
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 
-interface ReportProps {
-  tournaments: Tournament[];
-}
-
-export const Report: FC<ReportProps> = ({ tournaments }) => {
+const Home = () => {
   const [reportText, setReportText] = useState("");
   const [results, setResults] = useState<TourResult>();
   const [tournamentsStore, setTournamentsStore] = useState<TourResult>();
@@ -27,6 +26,20 @@ export const Report: FC<ReportProps> = ({ tournaments }) => {
   const [isTourInProcessModalOpen, setIsTourInProcessModalOpen] =
     useState(false);
   const [isValidTlInput, setIsValidTlInput] = useState(true);
+  const [tournaments, setTournaments] = useState<Tournament[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchFinishedTours();
+        setTournaments(data);
+      } catch (error) {
+        console.error("Error fetching tournaments:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const generateReportText = ({
     id,
@@ -37,10 +50,13 @@ export const Report: FC<ReportProps> = ({ tournaments }) => {
     tourStart,
     top1,
     top2,
+    numOfRounds,
   }: TourResult) => {
     let reward = calculateReward(
       tourType,
-      confirmedPlayersCount - Number(tlValue)
+      confirmedPlayersCount - Number(tlValue),
+      title,
+      numOfRounds - 1
     );
 
     if (increasedCupsEnabled) {
@@ -333,3 +349,5 @@ export const Report: FC<ReportProps> = ({ tournaments }) => {
     </>
   );
 };
+
+export default Home;

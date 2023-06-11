@@ -21,9 +21,8 @@ export const fetchTourResults = async (id: string): Promise<TourResult> => {
     const registeredPlayersCount = parseRegisteredPlayersCount($view);
     const tourType = parseTourType($view);
     const tourStart = parseTourStart($view);
-    const { top1, top2, firstChoice, secondChoice } = parseGridResults(
-      gridResponse.data
-    );
+    const { top1, top2, firstChoice, secondChoice, numOfRounds } =
+      parseGridResults(gridResponse.data);
 
     return {
       id,
@@ -36,6 +35,7 @@ export const fetchTourResults = async (id: string): Promise<TourResult> => {
       top2,
       firstChoice,
       secondChoice,
+      numOfRounds,
     };
   } catch (err) {
     console.error("Error fetching tournament results:", err);
@@ -77,6 +77,7 @@ const parseGridResults = (
   top2: string[];
   firstChoice: string[];
   secondChoice: string[];
+  numOfRounds: number;
 } => {
   const $ = cheerio.load(data);
   const stages = $('[id^="t"]').children();
@@ -114,8 +115,13 @@ const parseGridResults = (
     .map((_, elem) => $(elem).text())
     .get();
 
+  const numOfRounds = Number(
+    $(".round").last().find("a").text().match(/\d+/)![0]
+  );
+
   const halfIndex = Math.ceil(top3.length / 2);
   const firstChoice = top3.slice(0, halfIndex);
   const secondChoice = top3.slice(halfIndex);
-  return { top1, top2, firstChoice, secondChoice };
+
+  return { top1, top2, firstChoice, secondChoice, numOfRounds };
 };

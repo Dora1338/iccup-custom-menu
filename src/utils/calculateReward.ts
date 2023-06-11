@@ -1,5 +1,22 @@
-export function calculateReward(format: string, players: number) {
+export function calculateReward(
+  format: string,
+  players: number,
+  title: string,
+  numOfRounds: number
+) {
   let reward: number[] = [];
+  if (format === "1x1") {
+    if (title.includes("Custom Challenge")) {
+      if (numOfRounds >= 1 && numOfRounds <= 3) {
+        reward = [80, 60, 40];
+      } else if (numOfRounds === 4) {
+        reward = [100, 80, 60];
+      } else if (numOfRounds >= 5) {
+        reward = [120, 90, 60];
+      }
+    }
+    return reward;
+  }
   switch (format) {
     case "1x1":
       if (players < 4) {

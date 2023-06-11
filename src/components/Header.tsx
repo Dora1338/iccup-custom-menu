@@ -15,7 +15,7 @@ export const Header = () => {
   }
 
   return (
-    <header className="sticky z-10 top-0 h-[72px] transition-all duration-500 bg-gray-50 dark:bg-gray-900 border-b border-gray-800">
+    <header className="sticky z-10 top-0 h-[72px] transition-all duration-500 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
       <div className="mx-auto max-w-8xl xl:px-8">
         <div className="flex items-center justify-end px-4 py-5 sm:px-6 lg:px-8 xl:px-0">
           <button
