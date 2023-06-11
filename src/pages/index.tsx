@@ -1,5 +1,3 @@
-"use client";
-
 import { Input } from "@/components/Input";
 import { Modal } from "@/components/Modal";
 import { ReportTextarea } from "@/components/ReportTextarea";
