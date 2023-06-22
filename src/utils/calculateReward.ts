@@ -4,7 +4,10 @@ export function calculateReward(
   title: string,
   numOfRounds: number
 ): number[] {
-  if (format === "1x1" && title.includes("Custom Challenge")) {
+  if (
+    format === "1x1" &&
+    (title.includes("Custom Challenge") || title.includes("Custom Assorti"))
+  ) {
     if (numOfRounds >= 1 && numOfRounds <= 3) {
       return [80, 60, 40];
     } else if (numOfRounds === 4) {
